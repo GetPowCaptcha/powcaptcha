@@ -1,0 +1,185 @@
+<!-- This file is only for development/testing purposes. -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <style>
+      body {
+        height: 300vh;
+      }
+      .flex {
+        display: flex;
+        gap: 2rem;
+        padding: 2rem;
+      }
+      .col {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .col:first-child {
+        flex: 1;
+      }
+      .col:last-child {
+        flex: 0.5;
+      }
+    </style>
+
+    <title>powCAPTCHA Widget</title>
+  </head>
+  <body>
+    <script type="module" src="/src/index.ts"></script>
+    <div class="flex">
+      <div class="col">
+        <form method="POST" style="display: flex; flex-direction: column; gap: 1rem" id="form">
+          <input type="text" name="username" placeholder="Username" required />
+          <input type="email" name="email" placeholder="Email" />
+          <input type="text" name="website" placeholder="Website" />
+          <textarea name="message" placeholder="Message"></textarea>
+          <powcaptcha-widget data-app-id="%VITE_APP_ID%" data-context="contact"></powcaptcha-widget>
+
+          <input type="submit" value="Submit" />
+        </form>
+
+        <h2>Invisible</h2>
+        <form
+          method="POST"
+          style="display: flex; flex-direction: column; gap: 1rem"
+          id="form-invisible"
+        >
+          <input type="text" name="username" placeholder="Username" required />
+          <input type="email" name="email" placeholder="Email" required />
+          <input type="text" name="password" placeholder="Password" required />
+          <div>
+            <powcaptcha-widget data-app-id="%VITE_APP_ID%" data-invisible></powcaptcha-widget>
+            <powcaptcha-attribution-widget data-locale="es"></powcaptcha-attribution-widget>
+            <powcaptcha-attribution-widget data-theme="dark"></powcaptcha-attribution-widget>
+          </div>
+          <input type="submit" value="Submit" />
+        </form>
+
+        <h2>Invisible Solve on focus</h2>
+        <form
+          method="POST"
+          style="display: flex; flex-direction: column; gap: 1rem"
+          id="form-invisible-focus"
+        >
+          <input type="text" name="username" placeholder="Username" />
+          <input type="text" name="email" placeholder="Email" />
+          <input type="text" name="password" placeholder="Password" />
+          <powcaptcha-widget data-app-id="%VITE_APP_ID%" data-invisible></powcaptcha-widget>
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+      <div class="col">
+        <h2>Debug</h2>
+
+        <code>
+          <pre id="debug-output"></pre>
+        </code>
+      </div>
+    </div>
+    <script type="module">
+      const TEST_SECRET = import.meta.env.VITE_APP_SECRET;
+      const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+      const forms = document.querySelectorAll('form');
+      const widgets = document.querySelectorAll('powcaptcha-widget');
+      const debugOutput = document.getElementById('debug-output');
+      const log = (message) => {
+        debugOutput.innerHTML += message + '<br>';
+      };
+      for (let i = 0; i < widgets.length; i++) {
+        const widget = widgets[i];
+        const form = forms[i];
+        const formId = form.getAttribute('id');
+        const submitButton = form.querySelector("input[type='submit']");
+
+        const setLoadingToSubmitButton = (event) => {
+          submitButton.disabled = true;
+          submitButton.value = 'Loading... ' + event.detail.progress + '%';
+        };
+        const restoreButton = () => {
+          submitButton.disabled = false;
+          submitButton.value = 'Submit';
+        };
+
+        const onProgress = (event) => {
+          const { progress } = event.detail;
+          submitButton.value = `Loading... ${progress}%`;
+        };
+
+        // if is not solve on focus we need to call execute() method to get the challenge and solve it
+        widget.addEventListener('@powcaptcha/widget/solved', restoreButton);
+        widget.addEventListener('@powcaptcha/widget/solving/progress', onProgress);
+        widget.addEventListener('@powcaptcha/widget/error', restoreButton);
+        widget.addEventListener('@powcaptcha/widget/progress', setLoadingToSubmitButton);
+
+        if (formId === 'form-invisible-focus') {
+          const solveInvisibleOnFocus = async () => {
+            if (widget.isLoading()) {
+              return;
+            }
+            submitButton.disabled = true;
+            submitButton.value = 'Loading...';
+            await widget.execute();
+            submitButton.disabled = false;
+            submitButton.value = 'Submit';
+          };
+          form.addEventListener('focusin', solveInvisibleOnFocus);
+          submitButton.addEventListener('click', restoreButton);
+        }
+
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const submitResult = async () => {
+            const data = new FormData(form);
+            const powcaptchaResponse = data.get('powcaptcha-response');
+            const secret = TEST_SECRET;
+            const url = BACKEND_URL + `/challenges/verify`;
+            const entries = data.entries();
+            const message = data.get('message');
+            const email = data.get('email');
+            const body = {
+              secret,
+              solution: powcaptchaResponse,
+              spamFilter: {
+                text: message ?? '',
+                email,
+              },
+            };
+            const response = await fetch(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(body),
+            });
+            return response.json();
+          };
+
+          const result = await submitResult();
+          form.reset();
+          widget.reset();
+          log(`Form ${formId} submitted. Result: ${JSON.stringify(result, null, 2)}`);
+        });
+
+        submitButton.addEventListener('click', async (event) => {
+          const isInvisible = widget.hasAttribute('data-invisible');
+          if (!isInvisible) {
+            return;
+          }
+          event.preventDefault();
+
+          await widget.execute();
+
+          form.dispatchEvent(new Event('submit'));
+        });
+      }
+    </script>
+  </body>
+</html>

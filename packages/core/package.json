@@ -1,0 +1,44 @@
+{
+  "name": "@powcaptcha/core",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "PowCaptcha Core - A library for integrating PowCaptcha into your web application.",
+  "keywords": [
+    "powcaptcha",
+    "captcha",
+    "security",
+    "anti-bot"
+  ],
+  "author": "PowCaptcha Team",
+  "homepage": "https://powcaptcha.com",
+  "type": "module",
+  "main": "./dist/core.cjs",
+  "module": "./dist/core.js",
+  "types": "./dist/core.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "jest": "jest"
+  },
+  "dependencies": {
+    "@powcaptcha/crypto": "workspace:*"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.26.0",
+    "@powcaptcha/logger": "workspace:*",
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.6",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.2",
+    "vite-plugin-dts": "^4.5.3"
+  }
+}

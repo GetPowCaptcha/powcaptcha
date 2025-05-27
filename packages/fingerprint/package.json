@@ -1,0 +1,54 @@
+{
+  "name": "@powcaptcha/fingerprint",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "PowCaptcha Fingerprint library",
+  "keywords": [
+    "powcaptcha",
+    "fingerprint",
+    "captcha",
+    "security",
+    "anti-bot"
+  ],
+  "author": "PowCaptcha Team",
+  "homepage": "https://powcaptcha.com",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/fingerprint.js",
+      "require": "./dist/fingerprint.cjs"
+    }
+  },
+  "main": "./dist/fingerprint.cjs",
+  "module": "./dist/fingerprint.js",
+  "types": "./dist/fingerprint.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "dev": "vite",
+    "jest": "jest"
+  },
+  "dependencies": {
+    "@powcaptcha/core": "workspace:*",
+    "@powcaptcha/crypto": "workspace:*",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.26.0",
+    "@powcaptcha/logger": "workspace:*",
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.6",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.2",
+    "vite-plugin-dts": "^4.5.3"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig",
+  "compilerOptions": {
+    "incremental": true,
+    "composite": true,
+    "lib": ["es2024", "esnext", "dom"],
+    "module": "esnext",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "rootDir": "./src"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/tests/*.test.ts", "src/tests/test.setup.ts"]
+}

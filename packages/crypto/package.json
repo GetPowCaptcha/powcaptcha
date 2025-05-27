@@ -1,0 +1,52 @@
+{
+  "name": "@powcaptcha/crypto",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "PowCaptcha Crypto - A library for cryptographic operations in PowCaptcha.",
+  "keywords": [
+    "powcaptcha",
+    "crypto",
+    "captcha",
+    "security",
+    "anti-bot"
+  ],
+  "author": "PowCaptcha Team",
+  "homepage": "https://powcaptcha.com",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/crypto.js",
+      "require": "./dist/crypto.cjs"
+    }
+  },
+  "main": "./dist/crypto.cjs",
+  "module": "./dist/crypto.js",
+  "types": "./dist/crypto.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "dev": "vite",
+    "jest": "jest"
+  },
+  "dependencies": {
+    "js-sha256": "^0.11.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.26.0",
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.6",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.2",
+    "vite-plugin-dts": "^4.5.3"
+  }
+}
