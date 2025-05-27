@@ -1,0 +1,57 @@
+{
+  "name": "@powcaptcha/widget",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "PowCaptcha Widget - A library for integrating PowCaptcha into your web application.",
+  "keywords": [
+    "powcaptcha",
+    "widget",
+    "captcha",
+    "security",
+    "anti-bot"
+  ],
+  "author": "PowCaptcha Team",
+  "homepage": "https://powcaptcha.com",
+  "scripts": {
+    "dev": "vite --host",
+    "watch": "vite build --watch",
+    "build": "vite build",
+    "jest": "jest"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/widget.js",
+      "require": "./dist/widget.cjs"
+    }
+  },
+  "main": "./dist/widget.cjs",
+  "module": "./dist/widget.js",
+  "types": "./dist/widget.d.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@powcaptcha/core": "^1.0.0",
+    "@powcaptcha/crypto": "^1.0.0",
+    "@powcaptcha/fingerprint": "^1.0.0",
+    "@powcaptcha/signals": "^1.0.0",
+    "lit": "^3.2.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.26.0",
+    "@powcaptcha/logger": "^1.0.0",
+    "@types/jest": "^29.5.14",
+    "terser": "^5.39.0",
+    "ts-jest": "^29.2.6",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.2",
+    "wrangler": "^4.13.2"
+  },
+  "gitHead": "70d31c27920ab3101ac381e82d97f5d58390e314"
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div id="debug">
+      <h1>powCAPTCHA Fingerprint</h1>
+      <code>
+        <h2>Result</h2>
+        <pre id="fingerprint"></pre>
+        <h2>Raw Data</h2>
+        <pre id="raw-data"></pre>
+      </code>
+    </div>
+    <script type="module">
+      import { generateFingerprint } from "./src/index.ts";
+      const fingerprint = await generateFingerprint({ debug: true });
+
+      const fingerprintRawDataElement = document.getElementById("raw-data");
+      const fingerprintElement = document.getElementById("fingerprint");
+
+      fingerprintElement.innerText = fingerprint.fingerprintId;
+
+      fingerprintRawDataElement.innerText = JSON.stringify(
+        fingerprint,
+        null,
+        2
+      );
+    </script>
+  </body>
+</html>
