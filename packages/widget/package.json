@@ -35,17 +35,17 @@
     "access": "public"
   },
   "dependencies": {
-    "@powcaptcha/core": "^1.0.0",
-    "@powcaptcha/crypto": "^1.0.0",
-    "@powcaptcha/fingerprint": "^1.0.0",
-    "@powcaptcha/signals": "^1.0.0",
+    "@powcaptcha/core": "workspace:*",
+    "@powcaptcha/crypto": "workspace:*",
+    "@powcaptcha/fingerprint": "workspace:*",
+    "@powcaptcha/signals": "workspace:*",
     "lit": "^3.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",
     "@babel/preset-env": "^7.26.9",
     "@babel/preset-typescript": "^7.26.0",
-    "@powcaptcha/logger": "^1.0.0",
+    "@powcaptcha/logger": "workspace:*",
     "@types/jest": "^29.5.14",
     "terser": "^5.39.0",
     "ts-jest": "^29.2.6",

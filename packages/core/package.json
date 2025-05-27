@@ -27,13 +27,13 @@
     "jest": "jest"
   },
   "dependencies": {
-    "@powcaptcha/crypto": "^1.0.0"
+    "@powcaptcha/crypto": "workspace:*"
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",
     "@babel/preset-env": "^7.26.9",
     "@babel/preset-typescript": "^7.26.0",
-    "@powcaptcha/logger": "^1.0.0",
+    "@powcaptcha/logger": "workspace:*",
     "@types/jest": "^29.5.14",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.6",
