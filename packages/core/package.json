@@ -1,6 +1,6 @@
 {
   "name": "@powcaptcha/core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "description": "PowCaptcha Core - A library for integrating PowCaptcha into your web application.",
   "keywords": [

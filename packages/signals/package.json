@@ -1,6 +1,6 @@
 {
   "name": "@powcaptcha/signals",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "description": "PowCaptcha Signals - A library for generating and verifying PowCaptcha signals.",
   "keywords": [

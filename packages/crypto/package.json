@@ -1,6 +1,6 @@
 {
   "name": "@powcaptcha/crypto",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "description": "PowCaptcha Crypto - A library for cryptographic operations in PowCaptcha.",
   "keywords": [
