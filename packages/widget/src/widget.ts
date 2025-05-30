@@ -407,15 +407,18 @@ export class PowCaptchaWidget extends LitElement {
   }
 
   private _updateValidity(isValid: boolean, validationMessage: string) {
+    if (this.invisible) {
+      // In invisible mode, we don't set validity on the checkbox button
+      this._internals.setValidity({});
+      return;
+    }
     if (isValid) {
       this._internals.setValidity({});
       Logger.log('FACE Validity set to: VALID');
     } else {
-      const checkboxButton = this.invisible
-        ? undefined
-        : (this.shadowRoot?.getElementById('powcaptcha-checkbox-button') as
-            | HTMLButtonElement
-            | undefined);
+      const checkboxButton = this.shadowRoot?.getElementById('powcaptcha-checkbox-button') as
+        | HTMLButtonElement
+        | undefined;
       this._internals.setValidity({ customError: true }, validationMessage, checkboxButton);
       Logger.log(`FACE Validity set to: INVALID ('${validationMessage}')`);
     }
