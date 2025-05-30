@@ -100,7 +100,7 @@ export class SignalsFeatureAnalyzer {
       const events = collectedData[eventType];
       if (Array.isArray(events)) {
         events.forEach((event: SignalData) => {
-          if (event.tn && event.tn.trim() !== '') {
+          if (event.tn && typeof event.tn === 'string' && event.tn.trim() !== '') {
             targetNames.add(event.tn.trim());
           } else if (event.tg && event.tg.trim() !== '' && !event.tn) {
             // TODO ?
