@@ -35,6 +35,19 @@
     <script type="module" src="/src/index.ts" async defer></script>
     <div class="flex">
       <div class="col">
+        <h2>Invisible docs example</h2>
+        <form
+          method="POST"
+          style="display: flex; flex-direction: column; gap: 1rem"
+          id="form-docs-example"
+        >
+          <input type="text" name="name" placeholder="Full name" required />
+          <input type="email" name="email" placeholder="Email" required />
+          <textarea name="message" placeholder="Message" required></textarea>
+          <powcaptcha-widget data-app-id="%VITE_APP_ID%" data-invisible></powcaptcha-widget>
+          <input type="submit" value="Submit" />
+        </form>
+        <h2>Visible</h2>
         <form method="POST" style="display: flex; flex-direction: column; gap: 1rem" id="form">
           <input type="text" name="username" placeholder="Username" required />
           <input type="email" name="email" placeholder="Email" />
@@ -84,11 +97,93 @@
       </div>
     </div>
     <script type="module">
+      const debugOutput = document.getElementById('debug-output');
+      const log = (message) => {
+        debugOutput.innerHTML += message + '<br>';
+      };
+      const submitResult = async (form) => {
+        const data = new FormData(form);
+        const powcaptchaResponse = data.get('powcaptcha-response');
+        const secret = import.meta.env.VITE_APP_SECRET;
+        const url = import.meta.env.VITE_BACKEND_URL + `/challenges/verify`;
+        const entries = data.entries();
+        const message = data.get('message');
+        const email = data.get('email');
+        const body = {
+          secret,
+          solution: powcaptchaResponse,
+          spamFilter: {
+            text: message ?? '',
+            email,
+          },
+        };
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        });
+        return response.json();
+      };
+
+      // real example script
+      const formDocsExample = document.getElementById('form-docs-example');
+      const widgetDocsExample = formDocsExample.querySelector('powcaptcha-widget');
+      const submitButton = formDocsExample.querySelector("input[type='submit']");
+
+      widgetDocsExample.addEventListener('@powcaptcha/widget/solving/progress', function (event) {
+        const { progress } = event.detail;
+        submitButton.value = `Loading... ${progress}%`;
+        submitButton.disabled = true;
+      });
+
+      widgetDocsExample.addEventListener('@powcaptcha/widget/solved', function () {
+        submitButton.value = 'Submit';
+        submitButton.disabled = false;
+      });
+
+      widgetDocsExample.addEventListener('@powcaptcha/widget/error', function () {
+        submitButton.value = 'Submit';
+        submitButton.disabled = false;
+      });
+
+      let signalsReady = false;
+      const timeoutMs = 5000; // 5 seconds timeout to get signals
+
+      setTimeout(() => {
+        signalsReady = true;
+        console.log('Signals are ready');
+      }, timeoutMs);
+
+      formDocsExample.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const token = await widgetDocsExample.execute();
+        console.log('Widget executed, ready to submit', token);
+        const response = await submitResult(formDocsExample);
+        log(`Form submitted. Result: ${JSON.stringify(response, null, 2)}`);
+        formDocsExample.reset();
+      });
+
+      async function resolveIfSignalsAreReady() {
+        if (!signalsReady || widgetDocsExample.isLoading() || widgetDocsExample.isValidated()) {
+          return;
+        }
+        await widgetDocsExample.execute();
+      }
+
+      // watch form fields
+      const fields = formDocsExample.querySelectorAll('input, textarea, select');
+      fields.forEach((field) => {
+        field.addEventListener('focus', resolveIfSignalsAreReady);
+        field.addEventListener('keydown', resolveIfSignalsAreReady);
+      });
+    </script>
+    <script type="module">
       const TEST_SECRET = import.meta.env.VITE_APP_SECRET;
       const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
-      const forms = document.querySelectorAll('form');
-      const widgets = document.querySelectorAll('powcaptcha-widget');
+      const forms = document.querySelectorAll('form:not(#form-docs-example)');
+      const widgets = document.querySelectorAll('form:not(#form-docs-example) powcaptcha-widget');
       const debugOutput = document.getElementById('debug-output');
       const log = (message) => {
         debugOutput.innerHTML += message + '<br>';
