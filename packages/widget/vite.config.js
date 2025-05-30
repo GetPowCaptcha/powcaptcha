@@ -20,6 +20,10 @@ const alias = [
     find: '@powcaptcha/fingerprint',
     replacement: resolve(packagesDir, 'fingerprint', 'src'),
   },
+    {
+    find: '@powcaptcha/logger',
+    replacement: resolve(packagesDir, 'logger', 'src'),
+  },
   {
     find: '@powcaptcha/signals',
     replacement: resolve(packagesDir, 'signals', 'src'),
