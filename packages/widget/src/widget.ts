@@ -93,7 +93,7 @@ export class PowCaptchaWidget extends LitElement {
    * @default true
    */
   @property({ type: Boolean, attribute: 'data-detect-required-fields' })
-  detectRequiredFields?: boolean = true;
+  detectRequiredFields?: boolean;
 
   /**
    * The `data-theme` attribute specifies the theme of the widget.
@@ -181,6 +181,8 @@ export class PowCaptchaWidget extends LitElement {
     super.firstUpdated(changedProperties);
     this._updateValidity(false, t('widget.status.verificationRequired'));
     this._initializeOrchestrator();
+    // detectRequiredFields will set to false if invisible
+    this.detectRequiredFields ??= !this.invisible;
   }
 
   override updated(changedProperties: Map<string | symbol, unknown>) {
@@ -422,7 +424,7 @@ export class PowCaptchaWidget extends LitElement {
    * Detects required fields in the form and checks their validity.
    * This will help to collect signals and will stop the user to click directly on the widget in visible mode.
    */
-  private _detectRequiredFields(): boolean {
+  private _detectRequiredFields(reportValidity = true): boolean {
     if (!this._formElement) {
       Logger.warn('Form element not found, cannot detect required fields. Returning true.');
       return true;
@@ -449,7 +451,9 @@ export class PowCaptchaWidget extends LitElement {
           }
           // check if the field is valid
           if (!(field as HTMLInputElement).checkValidity()) {
-            (field as HTMLInputElement).reportValidity();
+            if (reportValidity) {
+              (field as HTMLInputElement).reportValidity();
+            }
             throw new Error('Required field is invalid');
           }
         });
@@ -640,8 +644,8 @@ export class PowCaptchaWidget extends LitElement {
       this._setValidationState(false, null, t('widget.status.componentNotInitialized'));
       return Promise.reject(new Error('Component not initialized.'));
     }
-
-    const requiredFieldsValid = this._detectRequiredFields();
+    // detectRequiredFields but don't report validity in invisible mode
+    const requiredFieldsValid = this._detectRequiredFields(false);
     if (!requiredFieldsValid) {
       Logger.warn('Required fields are invalid, preventing click.');
       return Promise.reject(new Error('Required fields are invalid.'));
