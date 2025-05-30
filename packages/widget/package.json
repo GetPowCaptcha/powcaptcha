@@ -1,6 +1,6 @@
 {
   "name": "@powcaptcha/widget",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "description": "PowCaptcha Widget - A library for integrating PowCaptcha into your web application.",
   "keywords": [

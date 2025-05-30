@@ -1,6 +1,6 @@
 {
   "name": "@powcaptcha/signals-analyzer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "description": "PowCaptcha Signals Analyzer - A library for analyzing PowCaptcha signals.",
   "keywords": [
