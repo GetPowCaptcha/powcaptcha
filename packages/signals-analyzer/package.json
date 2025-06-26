@@ -13,6 +13,7 @@
   "type": "module",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/signals-analyzer.js",
       "require": "./dist/signals-analyzer.cjs"
     }
