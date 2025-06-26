@@ -546,6 +546,7 @@ export class PowCaptchaWidget extends LitElement {
       }
       try {
         this.dispatchEvent(new CustomEvent('@powcaptcha/widget/solving')); // Dispatch solving event from component
+        this._signals?.finalizeCollection();
         const token = await this._orchestrator.solve(this._signalsData);
 
         Logger.log('Challenge solved on submit. Resubmitting form.');
